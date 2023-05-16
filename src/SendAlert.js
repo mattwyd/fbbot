@@ -1,6 +1,6 @@
 const KijiSearch = require('../KijijiSearch');
 
-const token = 'MTA4NTc2OTc0NjE5ODI5ODYzNg.GLw9cw.N3bqAGA_meVtjxFyuCmuqM48_pQYH700OqQDOw';
+const token = 'TOKEN';
 const Discord = require('discord.js');
 
 const client = new Discord.Client();
