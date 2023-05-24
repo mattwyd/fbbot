@@ -17,7 +17,7 @@ function KijiSearch(){
     // Scrape using returned promise 
     return kijiji.search(params, options).then(ads => {
         // Use the ads array
-        return 'this is a fucking car'
+        return 'testcase'
         //return ads.filter((Ad) => Ad.attributes['carmileageinkms'] < 180000 && Ad.attributes['carmileageinkms'] > 510)
         //    .filter((Ad) => Ad.attributes.hasOwnProperty('motorcyclesmake') ? false : true)
             //.filter((Ad) => Ad.attributes['caryear'] > 2006)
