@@ -10,10 +10,6 @@ This is KLA Kijiji Listing Alerts built with JavaScript. It allows users to be a
 
 Contributions are welcome! If you find any bugs or have suggestions for improvement, please open an issue or submit a pull request.
 
-## License
-
-This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
-
 ## Acknowledgements
 
 - [Kiji API]([https://kiji.com/api](https://www.npmjs.com/package/kijiji-scraper)) - Used for retrieving car data.
