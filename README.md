@@ -6,7 +6,7 @@ This is KLA Kijiji Listing Alerts built with JavaScript. It allows users to be a
 
 1. Clone the repository: `git clone https://github.com/mattwyd/kla.git`
 2. Navigate to the project directory: `cd kla`
-3. run `node sendAlert.js`
+3. run `node App.js`
 
 Contributions are welcome! If you find any bugs or have suggestions for improvement, please open an issue or submit a pull request.
 
