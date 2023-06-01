@@ -1,30 +1,78 @@
 const kijiji = require("kijiji-scraper");
+const fs = require('fs');
+const MAX_KMS = 180000
+const MAX_RATIO = 0.3
 
-function KijiSearch(){
 
-    const options = {
-        minResults: 50
-    };
 
-    const params = {
-        locationId: 1700273,  // Same as kijiji.locations.ONTARIO.OTTAWA_GATINEAU_AREA.OTTAWA
-        categoryId: 27,  // Same as kijiji.categories.CARS_AND_VEHICLES
-        sortByName: "dateDesc",  // Show the cheapest listings first
-        minPrice: 2000,
-        maxPrice: 6000
-    };
+async function KijijiSearch() {
+  const options = {
+    minResults: 5,
+  };
 
-    // Scrape using returned promise 
-    return kijiji.search(params, options).then(ads => {
-        // Use the ads array
-        return 'testcase'
-        //return ads.filter((Ad) => Ad.attributes['carmileageinkms'] < 180000 && Ad.attributes['carmileageinkms'] > 510)
-        //    .filter((Ad) => Ad.attributes.hasOwnProperty('motorcyclesmake') ? false : true)
-            //.filter((Ad) => Ad.attributes['caryear'] > 2006)
-            //.filter((y) => y.attributes['carmake'] === 'honda' || y.attributes['carmake'] === 'toyota')
-            //.filter((y) => y.attributes['carmodel'] === 'civic' || y.attributes['carmodel'] === 'accord' || y.attributes['carmodel'] === 'civic')
-    }).catch(console.error);
+  const params = {
+    locationId: 1700273,
+    categoryId: 27,
+    sortByName: "dateDesc",
+  };
 
+  try {
+    const ads = await kijiji.search(params, options);
+    // Use the ads array
+    const filteredAds = ads.filter((ad) => {
+        return (
+          !ad.attributes.hasOwnProperty('motorcyclesmake') &&
+          ad.attributes['forsaleby'] === 'ownr' &&
+          ad.attributes['carmileageinkms'] > 510 &&
+          ad.attributes['vehicletype'] === 'used' &&
+          ad.attributes['carmileageinkms'] < MAX_KMS && 
+          ad.attributes['price'] / ad.attributes['carmileageinkms'] < MAX_RATIO
+
+        );
+      });
+      
+    console.log(filteredAds);
+    return filteredAds;
+  } catch (error) {
+    console.error('Error:', error);
+    throw error;
+  }
 }
 
-module.exports = KijiSearch;
+
+async function calculatePriceToKmsRatio() {
+  try {
+    const ads = await KijijiSearch();
+
+    const priceToKmsRatio = {};
+
+    ads.forEach((ad) => {
+      const { caryear, carmake, carmodel, price, carmileageinkms, url } = ad.attributes;
+
+      const key = `${caryear}_${carmake}_${carmodel}`;
+
+      if (!priceToKmsRatio[key]) {
+        priceToKmsRatio[key] = [];
+      }
+
+      const ratio = price / carmileageinkms;
+      priceToKmsRatio[key].push(ratio);
+    });
+
+    const averageRatio = {};
+
+    for (const key in priceToKmsRatio) {
+      const ratios = priceToKmsRatio[key];
+      const sum = ratios.reduce((total, ratio) => total + ratio, 0);
+      const average = sum / ratios.length;
+      averageRatio[key] = average;
+    }
+
+    const jsonOutput = JSON.stringify(averageRatio, null, 2);
+    fs.writeFileSync('price_to_kms_ratio.json', jsonOutput);
+    console.log('Price to kilometers ratio saved to price_to_kms_ratio.json');
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+module.exports = KijijiSearch;

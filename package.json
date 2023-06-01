@@ -1,0 +1,26 @@
+{
+  "name": "kla",
+  "version": "1.0.0",
+  "description": "This is KLA Kijiji Listing Alerts built with JavaScript. It allows users to be alerted for cars based on variation in the market.",
+  "main": "src/SendAlert.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mattwyd/kla.git"
+  },
+  "keywords": [
+    "car"
+  ],
+  "author": "matt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mattwyd/kla/issues"
+  },
+  "homepage": "https://github.com/mattwyd/kla#readme",
+  "dependencies": {
+    "kijiji-scraper": "^6.3.2",
+    "nodemailer": "^6.9.3"
+  }
+}
